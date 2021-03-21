@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 
 const SimpleFullPages = ({
   size = 3,
-  speed = 1,
+  speed = 1000,
   mouse = 1000,
   drag = 500,
+  draggingDistance = 30,
   nav = true,
   children,
 }) => {
@@ -73,9 +74,10 @@ const SimpleFullPages = ({
     setMouseY(e.clientY);
   };
   const handleMouseUp = (e) => {
-    if (e.clientY < mouseY && Math.abs(e.clientY - mouseY) > 20)
+    if (e.clientY < mouseY && Math.abs(e.clientY - mouseY) > draggingDistance)
       return goDown();
-    if (e.clientY > mouseY && Math.abs(e.clientY - mouseY) > 20) return goUp();
+    if (e.clientY > mouseY && Math.abs(e.clientY - mouseY) > draggingDistance)
+      return goUp();
   };
 
   //移动端操作
@@ -85,12 +87,12 @@ const SimpleFullPages = ({
   const handleTouchEnd = (e) => {
     if (
       mobileTochY < e.changedTouches[0].screenY &&
-      Math.abs(mobileTochY - e.changedTouches[0].screenY) > 30
+      Math.abs(mobileTochY - e.changedTouches[0].screenY) > draggingDistance
     )
       return goUp();
     if (
       mobileTochY > e.changedTouches[0].screenY &&
-      Math.abs(mobileTochY - e.changedTouches[0].screenY) > 30
+      Math.abs(mobileTochY - e.changedTouches[0].screenY) > draggingDistance
     )
       return goDown();
   };
@@ -107,7 +109,7 @@ const SimpleFullPages = ({
         style={{
           width: "100vw",
           marginTop: `${top}px`,
-          transition: `all ${speed}s`,
+          transition: `all ${speed / 1000}s`,
         }}
         onMouseDown={handleMouseDown}
         onMouseUp={drag && throttle(handleMouseUp, drag)}
